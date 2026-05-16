@@ -16,7 +16,7 @@
 - [Task 4 — Object Tracking (Bonus)](#task-4--object-tracking-bonus)
 - [Task 5 — Evaluation & Metrics](#task-5--evaluation--metrics)
 - [Strengths & Limitations](#strengths--limitations)
-- [Real video & Tracking Output](#Real-video--tracking-output)
+- [Real Video and Tracking Output](#real-video-and-tracking-output)
 
 ---
 
