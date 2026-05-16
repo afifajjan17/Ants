@@ -515,7 +515,7 @@ while True:
 | FFmpeg | system | Video re-encoding (H.264) |
 | Google Colab | — | Training platform (Tesla T4 GPU) |
 
-##  Demo & Tracking Output
+##   Real Video and Tracking Output
 
 ### Tracking Video
 
