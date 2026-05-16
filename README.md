@@ -430,46 +430,53 @@ while True:
 
 ## 📈 Task 5 — Evaluation & Metrics
 
+## 📈 Task 5 — Evaluation & Metrics
+
 ### Overall Results
 
 | Metric | Value |
 |---|---|
-| **Precision** | 0.496 (49.6%) |
-| **Recall** | 0.386 (38.6%) |
-| **mAP @ IoU=0.50** | 0.369 (36.9%) |
-| **mAP @ IoU=0.50:0.95** | 0.213 (21.3%) |
-| **Avg Inference Time** | ~2.6 ms/image |
-| **FPS (Tesla T4 GPU)** | ~38 FPS |
+| **Precision** | 0.6454 (64.5%) |
+| **Recall** | 0.3098 (31.0%) |
+| **mAP @ IoU=0.50** | 0.2683 (26.8%) |
+| **mAP @ IoU=0.50:0.95** | 0.1707 (17.1%) |
+| **Avg Inference Time** | ~5.5 ms/image |
+| **FPS (Tesla T4 GPU)** | ~182 FPS |
 
 ### Per-Class Breakdown
 
 | Class | Precision | Recall | mAP@0.50 |
 |---|---|---|---|
-| pedestrian | 0.472 | 0.422 | 0.395 |
-| people | 0.524 | 0.295 | 0.295 |
-| bicycle | 0.251 | 0.177 | 0.109 |
-| **car** | **0.669** | **0.789** | **0.774** |
-| van | 0.521 | 0.428 | 0.419 |
-| truck | 0.536 | 0.368 | 0.356 |
-| tricycle | 0.462 | 0.256 | 0.250 |
-| awning-tricycle | 0.342 | 0.184 | 0.145 |
-| bus | 0.684 | 0.498 | 0.532 |
-| motor | 0.502 | 0.437 | 0.410 |
+| pedestrian | 0.6968 | 0.3285 | 0.2932 |
+| people | 0.7154 | 0.2035 | 0.1727 |
+| bicycle | 0.3864 | 0.1057 | 0.0567 |
+| **car** | **0.8190** | **0.7332** | **0.7011** |
+| van | 0.6460 | 0.3529 | 0.2918 |
+| truck | 0.6817 | 0.3227 | 0.2812 |
+| tricycle | 0.5825 | 0.1656 | 0.1239 |
+| awning-tricycle | 0.4248 | 0.1222 | 0.0711 |
+| bus | 0.8129 | 0.4502 | 0.4322 |
+| motor | 0.6884 | 0.3133 | 0.2588 |
 
 ### What the Metrics Mean
 
-**Precision (49.6%)** — Of every bounding box the model drew, ~50% were correct detections. The other 50% were false alarms, largely from small ambiguous objects at altitude.
+**Precision (64.5%)** — Of every bounding box the model drew, 64.5% were correct detections. Higher precision means fewer false alarms.
 
-**Recall (38.6%)** — The model successfully found ~39% of all real objects in the validation set. Many tiny/occluded objects were missed entirely.
+**Recall (31.0%)** — The model successfully found 31.0% of all real objects in the validation set. Many tiny and occluded objects were missed, which is expected in aerial imagery where people are sometimes under 10 pixels wide.
 
-**mAP@0.50 (36.9%)** — Standard aerial detection benchmark. A predicted box counts as correct if it overlaps ground truth by ≥50%. This score is competitive for a 30-epoch YOLOv8s run on VisDrone.
+**mAP@0.50 (26.8%)** — Standard detection accuracy at IoU threshold 0.50. A predicted box counts as correct if it overlaps ground truth by at least 50%. 
 
-**mAP@0.50:0.95 (21.3%)** — Stricter metric averaging across IoU thresholds 0.50→0.95. Penalizes imprecise box boundaries heavily. Published VisDrone benchmarks for small models typically score 0.10–0.25 — our result sits comfortably in this range.
+**mAP@0.50:0.95 (17.1%)** — Stricter version averaged over IoU thresholds 0.50 to 0.95. Heavily penalizes imprecise box boundaries. Published VisDrone benchmarks for small models typically score between 10–25% — our result of 17.1% sits within this competitive range.
 
-**FPS (~38)** — Well above the real-time threshold of 25–30 FPS, making the system suitable for live drone feed processing.
+**FPS (~182)** — Model processes approximately 182 frames per second on Tesla T4 GPU, far exceeding the real-time threshold of 25–30 FPS, making it highly suitable for live drone feed processing.
 
----
+### Key Takeaways
 
+- **Car and bus detection is strong** — mAP50 of 0.701 and 0.432 respectively
+- **Human detection is moderate** — pedestrian mAP50 of 0.293, expected given tiny object sizes in aerial view
+- **Rare classes are weakest** — bicycle (0.057) and awning-tricycle (0.071) suffer from severe class imbalance in training data
+- **High precision (64.5%)** means when the model does detect something, it is usually correct
+- **Lower recall (31.0%)** means many small or occluded objects are missed — a known limitation of aerial detection at 640×640 resolution
 ## Strengths & Limitations
 
 ### Strengths
@@ -492,10 +499,8 @@ while True:
 
 - Supervision library API change (`ByteTracker` → `ByteTrack`) required version-specific handling
 - VisDrone's extreme class imbalance (44× car vs awning-tricycle) required careful YAML class mapping
-- Dataset YAML initially set with wrong `nc` value — corrected by scanning actual label files
 - Video output required ffmpeg H.264 re-encoding for browser/notebook playback compatibility
 
----
 
 
 ##  Tech Stack
@@ -510,6 +515,11 @@ while True:
 | Matplotlib | 3.x | Visualization & plots |
 | FFmpeg | system | Video re-encoding (H.264) |
 | Google Colab | — | Training platform (Tesla T4 GPU) |
+
+## 🎬 Demo & Tracking Output
+
+### Tracking Video
+ [Click here to watch the real video and tracking output](https://drive.google.com/file/d/1CmXL-vfZxnVZdfAfsdI43Ts6a0kM9eMs/view?usp=sharing)
 
 
 
